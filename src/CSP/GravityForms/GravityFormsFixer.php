@@ -87,11 +87,25 @@ class GravityFormsFixer
         );
     }
 
+    public function handleInlineJavaScriptVoid(string $formString): string
+    {
+        $pattern = '/href\s*=\s*([\'"])javascript:void\(0\);\1/m';
+
+        return preg_replace_callback(
+            $pattern,
+            function (): string {
+                return ' href="#"';
+            },
+            $formString
+        );
+    }
+
     public function modifyFormHtml(string $formString, array $form): string
     {
         $formString = $this->handleOnClickAttributes($formString);
         $formString = $this->handleOnKeyPressAttributes($formString);
         $formString = $this->handleStyleAttribute($formString, $form);
+        $formString = $this->handleInlineJavaScriptVoid($formString);
 
         return $formString;
     }
