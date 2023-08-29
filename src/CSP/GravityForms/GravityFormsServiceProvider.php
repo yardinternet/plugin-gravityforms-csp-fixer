@@ -16,6 +16,6 @@ class GravityFormsServiceProvider extends ServiceProvider
 
     public function enqueueFixerScript(): void
     {
-        \wp_enqueue_script('csp-fixer', sprintf('%s/resources/js/csp-fixer.js', $this->plugin->getPluginUrl()), ['jquery'], $this->plugin->getVersion());
+        wp_enqueue_script('csp-fixer', sprintf('%s/resources/js/csp-fixer.js', $this->plugin->getPluginUrl()), ['jquery'], $this->plugin->getVersion());
     }
 }
