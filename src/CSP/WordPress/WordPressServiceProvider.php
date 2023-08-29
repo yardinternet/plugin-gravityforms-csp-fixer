@@ -13,16 +13,17 @@ class WordPressServiceProvider extends ServiceProvider
 
     public function enqueueReplacementScripts(): void
     {
+        $wp_scripts = wp_scripts();
+
         // https://github.com/WordPress/WordPress/blob/master/wp-includes/js/dist/a11y.js unsafe inline style attribute
-        wp_deregister_script('wp-a11y');
-        wp_register_script('wp-a11y', sprintf('%s/resources/js/replacements/a11y.js', $this->plugin->getPluginUrl()), ['wp-dom-ready', 'wp-i18n'], false);
+        if ( isset( $wp_scripts->registered['wp-a11y'] ) ) {
+            $wp_scripts->registered['wp-a11y']->src = sprintf('%s/resources/js/replacements/a11y.js', $this->plugin->getPluginUrl());
+        }
         wp_enqueue_style('wp-a11y-css', sprintf('%s/resources/js/replacements/a11y.css', $this->plugin->getPluginUrl()), [], false);
-        
-        // https://wordpress.stackexchange.com/questions/392802/deferring-script-wp-i18n-causes-a-console-error-wp-is-not-defined-gravityfor
-        array_unshift(wp_scripts()->queue, 'wp-a11y');
 
         // https://github.com/WordPress/WordPress/blob/master/wp-includes/js/plupload/moxie.js unsafe inline style attribute
-        wp_deregister_script('moxiejs');
-        wp_enqueue_script('moxiejs', sprintf('%s/resources/js/replacements/moxie.js', $this->plugin->getPluginUrl()), [], '1.3.5', 1);
+        if ( isset( $wp_scripts->registered['moxiejs'] ) ) {
+            $wp_scripts->registered['moxiejs']->src = sprintf('%s/resources/js/replacements/moxie.js', $this->plugin->getPluginUrl());
+        }
     }
 }
