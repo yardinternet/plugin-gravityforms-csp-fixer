@@ -6,7 +6,6 @@ class GravityFormsFixer
 {
     public function generateUniqueEventListenerName(): string
     {
-        // Generate a unique name using a combination of timestamp and random number
         return 'eventListener_' . wp_unique_id();
     }
 
