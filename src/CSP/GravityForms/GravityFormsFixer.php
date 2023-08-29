@@ -10,7 +10,7 @@ class GravityFormsFixer
         return 'eventListener_' . time() . '_' . mt_rand(1000, 9999);
     }
 
-    public function handleOnclickAttributes(string $formString): string
+    public function handleOnClickAttributes(string $formString): string
     {
         $pattern = '/\sonclick\s*=\s*([\'"])((?>\\\\\1|[^\1])*?)\1/m';
         $scriptTags = [];
@@ -30,6 +30,34 @@ class GravityFormsFixer
                 $scriptTags[] = $scriptTag;
     
                 return ' data-onclick-handler="' . $uniqueListenerName . '"';
+            },
+            $formString
+        );
+    
+        // Append all the script tags to the modified $formString
+        return $formString . implode('', $scriptTags);
+    }
+
+    public function handleOnKeyPressAttributes(string $formString): string
+    {
+        $pattern = '/\sonkeypress\s*=\s*([\'"])((?>\\\\\1|[^\1])*?)\1/m';
+        $scriptTags = [];
+    
+        $formString = preg_replace_callback(
+            $pattern,
+            function (array $matches) use (&$scriptTags): string {
+                $uniqueListenerName = $this->generateUniqueEventListenerName();
+    
+                $onclickCode = html_entity_decode($matches[2]);
+                $scriptTag = '<script id="' . $uniqueListenerName . '">
+                    document.querySelector("[data-onkeypress-handler=' . $uniqueListenerName . ']").addEventListener("keypress", function() {
+                        ' . $onclickCode . '
+                    });
+                    </script>';
+    
+                $scriptTags[] = $scriptTag;
+    
+                return ' data-onkeypress-handler="' . $uniqueListenerName . '"';
             },
             $formString
         );
@@ -61,7 +89,8 @@ class GravityFormsFixer
 
     public function modifyFormHtml(string $formString, array $form): string
     {
-        $formString = $this->handleOnclickAttributes($formString);
+        $formString = $this->handleOnClickAttributes($formString);
+        $formString = $this->handleOnKeyPressAttributes($formString);
         $formString = $this->handleStyleAttribute($formString, $form);
 
         return $formString;
