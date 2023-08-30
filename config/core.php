@@ -8,6 +8,7 @@ return [
     'providers' => [
         /** Global providers */
         Yard\CSP\GravityForms\GravityFormsServiceProvider::class,
+        Yard\CSP\WordPress\WordPressServiceProvider::class,
 
         /** Providers specific to the admin */
         'admin' => []
