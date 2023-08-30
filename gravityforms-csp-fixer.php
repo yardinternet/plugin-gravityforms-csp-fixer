@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       Yard | CSP Fixer
+ * Plugin Name:       GravityForms CSP Fixer
  * Description:       Fixes GravityForms plugin so it is CSP compliant.
  * Version:           0.0.1
  * Requires at least: 5.9

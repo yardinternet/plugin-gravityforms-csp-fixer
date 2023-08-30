@@ -1,6 +1,6 @@
 {
-	"name": "plugin/yard-gravityforms-csp-fixer",
-	"description": "Yard | CSP Fixer",
+	"name": "plugin/gravityforms-csp-fixer",
+	"description": "Fixes GravityForms plugin so it is CSP compliant.",
 	"authors": [
 		{
 			"name": "Yard | Digital Agency",

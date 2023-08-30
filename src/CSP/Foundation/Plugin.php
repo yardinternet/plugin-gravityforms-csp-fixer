@@ -6,7 +6,7 @@ use Exception;
 
 class Plugin
 {
-    public const NAME = 'yard-gravityforms-csp-fixer';
+    public const NAME = 'gravityforms-csp-fixer';
     public const VERSION = \YCSP_VERSION;
 
     public Config $config;

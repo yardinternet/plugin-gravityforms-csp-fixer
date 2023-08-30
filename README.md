@@ -1,4 +1,4 @@
-# GF CSP Fixer
+# GravityForms CSP Fixer
 
 Gravity Forms is not ready for a Strict CSP enabled site. This plugin tries to fix those issues.
 With this plugin you should be able to disallow `unsafe-inline` and `unsafe-eval` in your CSP.
