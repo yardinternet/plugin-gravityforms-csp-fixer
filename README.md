@@ -7,7 +7,6 @@ With this plugin you should be able to disallow `unsafe-inline` and `unsafe-eval
 
 ## Features
 
-* Handle inline onClick attributes
-* Handle inline onKeyPress attributes
+* Handle inline on* attributes
 * Handle inline styling attributes
 * Handle inline JavaScript void links
