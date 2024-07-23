@@ -4,68 +4,33 @@ namespace Yard\CSP\GravityForms;
 
 class GravityFormsFixer
 {
-    public function generateUniqueEventListenerName(): string
+    private function handleInlineEvents(string $formString): string
     {
-        return 'eventListener_' . wp_unique_id();
-    }
-
-    public function handleOnClickAttributes(string $formString): string
-    {
-        $pattern = '/\sonclick\s*=\s*([\'"])((?>\\\\\1|[^\1])*?)\1/m';
+        $pattern = '/\son([a-z]*)\s*=\s*([\'"])((?>\\\\\2|[^\2])*?)\2/m';
         $scriptTags = [];
-    
+
         $formString = preg_replace_callback(
             $pattern,
             function (array $matches) use (&$scriptTags): string {
-                $uniqueListenerName = $this->generateUniqueEventListenerName();
-    
-                $onclickCode = html_entity_decode($matches[2]);
-                $scriptTag = '<script id="' . $uniqueListenerName . '">
-                    document.querySelector("[data-onclick-handler=' . $uniqueListenerName . ']").addEventListener("click", function() {
-                        ' . $onclickCode . '
-                    });
-                    </script>';
-    
-                $scriptTags[] = $scriptTag;
-    
-                return ' data-onclick-handler="' . $uniqueListenerName . '"';
+                $uniqueListenerName = wp_unique_id('eventListener_');
+                $event = $matches[1];
+                $scriptTags[] = sprintf(
+                    '<script id="%1$s">document.querySelector("[data-on%2$s-handler=%1$s]").addEventListener("%2$s", function() {%3$s});</script>',
+                    $uniqueListenerName,
+                    $event,
+                    html_entity_decode($matches[3])
+                );
+
+                return sprintf(' data-on%s-handler="%s"', $event, $uniqueListenerName);
             },
             $formString
         );
-    
+
         // Append all the script tags to the modified $formString
         return $formString . implode('', $scriptTags);
     }
 
-    public function handleOnKeyPressAttributes(string $formString): string
-    {
-        $pattern = '/\sonkeypress\s*=\s*([\'"])((?>\\\\\1|[^\1])*?)\1/m';
-        $scriptTags = [];
-    
-        $formString = preg_replace_callback(
-            $pattern,
-            function (array $matches) use (&$scriptTags): string {
-                $uniqueListenerName = $this->generateUniqueEventListenerName();
-    
-                $onclickCode = html_entity_decode($matches[2]);
-                $scriptTag = '<script id="' . $uniqueListenerName . '">
-                    document.querySelector("[data-onkeypress-handler=' . $uniqueListenerName . ']").addEventListener("keypress", function() {
-                        ' . $onclickCode . '
-                    });
-                    </script>';
-    
-                $scriptTags[] = $scriptTag;
-    
-                return ' data-onkeypress-handler="' . $uniqueListenerName . '"';
-            },
-            $formString
-        );
-    
-        // Append all the script tags to the modified $formString
-        return $formString . implode('', $scriptTags);
-    }
-
-    public function handleStyleAttribute(string $formString, array $form): string
+    private function handleStyleAttribute(string $formString, array $form): string
     {
         $pattern = '/\sstyle\s*=\s*([\'"])((?>\\\\\1|[^\1])*?)\1/m';
 
@@ -86,7 +51,7 @@ class GravityFormsFixer
         );
     }
 
-    public function handleInlineJavaScriptVoid(string $formString): string
+    private function handleInlineJavaScriptVoid(string $formString): string
     {
         $pattern = '/href\s*=\s*([\'"])javascript:void\(0\);\1/m';
 
@@ -101,8 +66,7 @@ class GravityFormsFixer
 
     public function modifyFormHtml(string $formString, array $form): string
     {
-        $formString = $this->handleOnClickAttributes($formString);
-        $formString = $this->handleOnKeyPressAttributes($formString);
+        $formString = $this->handleInlineEvents($formString);
         $formString = $this->handleStyleAttribute($formString, $form);
         $formString = $this->handleInlineJavaScriptVoid($formString);
 
