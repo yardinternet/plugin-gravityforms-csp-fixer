@@ -14,11 +14,16 @@ class GravityFormsFixer
             function (array $matches) use (&$scriptTags): string {
                 $uniqueListenerName = wp_unique_id('eventListener_');
                 $event = $matches[1];
-                $scriptTags[] = sprintf(
-                    '<script id="%1$s">document.querySelector("[data-on%2$s-handler=%1$s]").addEventListener("%2$s", function() {%3$s});</script>',
-                    $uniqueListenerName,
-                    $event,
-                    html_entity_decode($matches[3])
+                $scriptTags[] = wp_get_inline_script_tag(
+                    sprintf(
+                        'document.querySelector("[data-on%2$s-handler=%1$s]").addEventListener("%2$s", function() {%3$s});',
+                        $uniqueListenerName,
+                        $event,
+                        html_entity_decode($matches[3])
+                    ),
+                    [
+                        'id' => $uniqueListenerName
+                    ]
                 );
 
                 return sprintf(' data-on%s-handler="%s"', $event, $uniqueListenerName);
