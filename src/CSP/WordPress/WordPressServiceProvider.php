@@ -9,7 +9,7 @@ class WordPressServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->plugin->loader->addAction('wp_enqueue_scripts', $this, 'enqueueReplacementScripts', 10, 0);
-        $this->plugin->loader->addFilter('render_block', $this, 'moveInlineStyles');
+        $this->plugin->loader->addFilter('render_block', $this, 'moveInlineStyles', 10, 2);
     }
 
     public function enqueueReplacementScripts(): void
@@ -28,10 +28,14 @@ class WordPressServiceProvider extends ServiceProvider
         }
     }
 
-    public function moveInlineStyles(string $blockContent): string
+    public function moveInlineStyles(string $blockContent, array $block): string
     {
         $htmlProcessor = \WP_HTML_Processor::create_fragment($blockContent);
         $cssRules = [];
+        $excludeFromCssRules = [
+            'yard-blocks/iconlist-item',
+        ];
+        $shouldExcludeFromCss = in_array($block['blockName'], $excludeFromCssRules, true);
 
         while ($htmlProcessor->next_tag()) {
             $styleAttribute = $htmlProcessor->get_attribute('style');
@@ -49,7 +53,7 @@ class WordPressServiceProvider extends ServiceProvider
                 $declarations[trim($ruleElements[0])] = trim($ruleElements[1]) . ' !important';
             }
 
-            if (! empty($declarations)) {
+            if (! empty($declarations) && ! $shouldExcludeFromCss) {
                 $cspClass = wp_unique_prefixed_id('yard-csp-fixer-block-');
                 $classes = iterator_to_array($htmlProcessor->class_list());
                 $classes[] = $cspClass;
@@ -69,7 +73,7 @@ class WordPressServiceProvider extends ServiceProvider
             $htmlProcessor->remove_attribute('style');
         }
 
-        if (! empty($cssRules)) {
+        if (! empty($cssRules) && ! $shouldExcludeFromCss) {
             wp_register_style('yard-csp-fixer', false);
             wp_enqueue_style('yard-csp-fixer');
             wp_add_inline_style(
