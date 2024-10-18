@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.7
+
+- Feat: add inline style as data attribute
+
 ## 0.0.6
 
 - Feat: exclude blocks from css-rules

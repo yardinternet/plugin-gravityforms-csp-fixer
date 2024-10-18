@@ -69,6 +69,7 @@ class WordPressServiceProvider extends ServiceProvider
                 ];
 
                 $htmlProcessor->add_class($cspClass);
+                $htmlProcessor->set_attribute('data-inline-style', $styleAttribute);
             }
             $htmlProcessor->remove_attribute('style');
         }
