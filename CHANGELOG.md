@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.8
+
+- Fix: hide Gravity Forms steps
+
 ## 0.0.7
 
 - Feat: add inline style as data attribute
