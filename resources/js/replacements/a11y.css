@@ -1,5 +1,6 @@
 .a11y-speak-region,
-.a11y-speak-intro-text {
+.a11y-speak-intro-text,
+div[aria-relevant="additions text"] {
     position: absolute;
     overflow: hidden;
     width: 1px;
