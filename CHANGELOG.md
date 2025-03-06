@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.9
+
+- Feat: allow mulit file uploads again
+
 ## 0.0.8
 
 - Fix: hide Gravity Forms steps
