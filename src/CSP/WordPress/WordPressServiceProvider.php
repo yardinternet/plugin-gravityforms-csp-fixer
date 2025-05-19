@@ -18,13 +18,13 @@ class WordPressServiceProvider extends ServiceProvider
 
         // https://github.com/WordPress/WordPress/blob/master/wp-includes/js/dist/a11y.js unsafe inline style attribute
         if (isset($wpScripts->registered['wp-a11y'])) {
-            $wpScripts->registered['wp-a11y']->src = sprintf('%s/public/js/replacements/a11y.js', $this->plugin->getPluginUrl());
+            $wpScripts->registered['wp-a11y']->src = sprintf('%s/public/replacements/js/a11y.js', $this->plugin->getPluginUrl());
         }
-        wp_enqueue_style('wp-a11y-css', sprintf('%s/public/js/replacements/a11y.css', $this->plugin->getPluginUrl()), [], false);
+        wp_enqueue_style('wp-a11y-css', sprintf('%s/public/replacements/css/a11y.css', $this->plugin->getPluginUrl()), [], false);
 
         // https://github.com/WordPress/WordPress/blob/master/wp-includes/js/plupload/moxie.js unsafe inline style attribute
         if (isset($wpScripts->registered['moxiejs'])) {
-            $wpScripts->registered['moxiejs']->src = sprintf('%s/public/js/replacements/moxie.js', $this->plugin->getPluginUrl());
+            $wpScripts->registered['moxiejs']->src = sprintf('%s/public/replacements/js/moxie.js', $this->plugin->getPluginUrl());
         }
     }
 
