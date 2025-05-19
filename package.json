@@ -1,0 +1,17 @@
+{
+	"name": "gravityforms-csp-fixer",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"start": "WATCH=true vite build",
+		"build": "vite build",
+		"test": "vitest"
+	},
+	"devDependencies": {
+		"vite": "^6.3.5"
+	},
+	"dependencies": {
+		"expr-eval": "^2.0.2"
+	}
+}
