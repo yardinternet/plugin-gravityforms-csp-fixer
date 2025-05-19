@@ -1,18 +1,5 @@
-jQuery( document ).on(
-	'gform_post_render',
-	function ( event, form_id, current_page ) {
-		//TODO: betere scope
-		var elements = jQuery( document ).find( '[data-style]' );
-		elements.each( function () {
-			var styles = jQuery( this ).data( 'style' );
-			jQuery( this ).css( styles );
-			jQuery( this ).removeAttr( 'data-style' );
-		} );
-	}
-);
-
 //Add event handlers for the delete button of uploaded files
-jQuery(document).on('gform_post_render', function () {
+jQuery( document ).on( 'gform_post_render', function () {
 	gform.addFilter(
 		'gform_file_upload_markup',
 		function ( html, file, up, strings, imagesUrl, response ) {
@@ -44,10 +31,14 @@ jQuery(document).on('gform_post_render', function () {
 
 			html = html.replaceAll(
 				regexp,
-				' data-on$1-handler="upload$1handler_' + formId + '_' + fieldId + '"'
+				' data-on$1-handler="upload$1handler_' +
+					formId +
+					'_' +
+					fieldId +
+					'"'
 			);
 
 			return html;
 		}
 	);
-});
+} );
