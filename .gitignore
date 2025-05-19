@@ -107,13 +107,6 @@ wp-content/
 
 .DS_Store
 
-build/
-!build/yard-blocks.asset.php
-!build/yard-blocks-editor.css
-!build/yard-blocks-core.css
-!build/yard-blocks-style.css
-!build/yard-blocks.js
-
 # php cs
 .php_cs.cache
 
