@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.10
+
+- (feat): add vite and refactor javascript into different snippets
+- (refactor): move replacements javascript to /public/js folder
+- (feat): add GFCalc calculations monkey patch
+
 ## 0.0.9
 
 - Feat: allow mulit file uploads again
