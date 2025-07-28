@@ -1,10 +1,15 @@
 # Changelog
 
+## 0.1.0
+
+- Chore: update moxie to latest wp variant
+- Chore: update ua-parser dep inside moxie to latest v1
+
 ## 0.0.10
 
-- (feat): add vite and refactor javascript into different snippets
-- (refactor): move replacements javascript to /public/js folder
-- (feat): add GFCalc calculations monkey patch
+- Feat: add vite and refactor javascript into different snippets
+- Feat: add GFCalc calculations monkey patch
+- Refactor: move replacements javascript to /public/js folder
 
 ## 0.0.9
 
