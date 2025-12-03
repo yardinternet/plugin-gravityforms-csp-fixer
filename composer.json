@@ -1,6 +1,7 @@
 {
 	"name": "plugin/gravityforms-csp-fixer",
 	"description": "Fixes GravityForms plugin so it is CSP compliant.",
+    "license": "EUPL-1.2",
 	"authors": [
 		{
 			"name": "Yard | Digital Agency",
