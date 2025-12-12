@@ -14,15 +14,29 @@ class GravityFormsFixer
             function (array $matches) use (&$scriptTags): string {
                 $uniqueListenerName = wp_unique_id('eventListener_');
                 $event = $matches[1];
+                $handlerCode = html_entity_decode($matches[3]);
+
+                /**
+                 * Add event listener to document which handles event delegation
+                 * in case of multiple elements sharing same event listener
+                 * (e.g. gravity forms list field add/remove button)
+                 * .call() is used to delegate proper "this" keyword to original event handler
+                 */
                 $scriptTags[] = wp_get_inline_script_tag(
                     sprintf(
-                        'document.querySelector("[data-on%2$s-handler=%1$s]").addEventListener("%2$s", function() {%3$s});',
+                        'document.addEventListener("%2$s", function(e) {
+							const parent = e.target.closest("[data-on%2$s-handler=%1$s]");
+
+							if (parent) {
+								(function(){ %3$s }).call(parent);
+							}
+						});',
                         $uniqueListenerName,
                         $event,
-                        html_entity_decode($matches[3])
+                        $handlerCode
                     ),
                     [
-                        'id' => $uniqueListenerName
+                        'id' => $uniqueListenerName,
                     ]
                 );
 
