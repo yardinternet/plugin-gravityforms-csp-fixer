@@ -50,7 +50,7 @@ class WordPressServiceProvider extends ServiceProvider
                 if (empty($ruleElements[1])) {
                     continue;
                 }
-                $declarations[trim($ruleElements[0])] = trim($ruleElements[1]) . ' !important';
+                $declarations[trim($ruleElements[0])] = trim($ruleElements[1]);
             }
 
             if (! empty($declarations) && ! $shouldExcludeFromCss) {
