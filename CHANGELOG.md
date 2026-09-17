@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.4
+
+- Fix: add a CSP nonce to inline `<script>` tags returned through the `gform_confirmation` filter.
 ## 0.1.0
 
 - Chore: update moxie to latest wp variant
@@ -49,4 +52,3 @@
 ## 0.0.1 - Aug 30, 2023
 
 - Init: plugin.
-  

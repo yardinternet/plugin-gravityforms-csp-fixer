@@ -11,6 +11,8 @@ class GravityFormsServiceProvider extends ServiceProvider
         $gravityFormsFixer = new GravityFormsFixer();
 
         $this->plugin->loader->addFilter('gform_get_form_filter', $gravityFormsFixer, 'modifyFormHtml', 10, 2);
+
+        $this->plugin->loader->addFilter('gform_confirmation', $gravityFormsFixer, 'modifyConfirmationHtml', 20, 1);
         $this->plugin->loader->addAction('gform_enqueue_scripts', $this, 'enqueueFixerScript', 10, 0);
     }
 

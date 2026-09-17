@@ -106,4 +106,57 @@ class GravityFormsFixer
 
         return $formString;
     }
+
+    /**
+     * Gravity Forms add-ons may return raw <script>, bypassing any CSP nonce.
+     * Re-emit through wp_get_inline_script_tag() and the wp_inline_script_attributes filter to add nonce.
+     *
+     * @param string|array $confirmation
+     *
+     * @return string|array
+     */
+    public function modifyConfirmationHtml($confirmation)
+    {
+        if (! is_string($confirmation)) {
+            return $confirmation;
+        }
+
+        return preg_replace_callback(
+            '#<script\b(?![^>]*\s(?:nonce|src)\s*=)([^>]*)>(.*?)</script>#is',
+            function (array $matches): string {
+                $attributes = [];
+
+                // Parse all attributes
+                if (preg_match_all('#\s([a-zA-Z][a-zA-Z0-9\-]*)\s*=\s*([\'"])(.*?)\2#i', $matches[1], $attrMatches, PREG_SET_ORDER)) {
+                    foreach ($attrMatches as $attrMatch) {
+                        $attributes[strtolower($attrMatch[1])] = $attrMatch[3];
+                    }
+                }
+
+                // Handle specific attributes that need special treatment
+                if (isset($attributes['id'])) {
+                    $attributes['id'] = $attributes['id'];
+                }
+
+                if (isset($attributes['type'])) {
+                    $attributes['type'] = $attributes['type'];
+                }
+
+                if (isset($attributes['module'])) {
+                    $attributes['module'] = $attributes['module'];
+                }
+
+                if (isset($attributes['async'])) {
+                    $attributes['async'] = true;
+                }
+
+                if (isset($attributes['defer'])) {
+                    $attributes['defer'] = true;
+                }
+
+                return wp_get_inline_script_tag($matches[2], $attributes);
+            },
+            $confirmation
+        );
+    }
 }
