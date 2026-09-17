@@ -98,12 +98,57 @@ class GravityFormsFixer
         );
     }
 
+    /**
+     * Gravity Forms and its add-ons may emit raw <script>, bypassing any CSP nonce.
+     * Run wp_inline_script_attributes filter so inline tags get nonces.
+     */
+    private function handleInlineScriptTags(string $html): string
+    {
+        $processor = new \WP_HTML_Tag_Processor($html);
+
+        while ($processor->next_tag('SCRIPT')) {
+            // External scripts are covered by the source list, not by a nonce.
+            if (null !== $processor->get_attribute('src') || null !== $processor->get_attribute('nonce')) {
+                continue;
+            }
+
+            $attributes = apply_filters('wp_inline_script_attributes', [], $processor->get_modifiable_text());
+
+            foreach ($attributes as $name => $value) {
+                // Never overwrite an attribute the script set itself.
+                if (null !== $processor->get_attribute($name)) {
+                    continue;
+                }
+
+                $processor->set_attribute($name, $value ?? true);
+            }
+        }
+
+        return $processor->get_updated_html();
+    }
+
     public function modifyFormHtml(string $formString, array $form): string
     {
         $formString = $this->handleInlineEvents($formString);
         $formString = $this->handleStyleAttribute($formString, $form);
         $formString = $this->handleInlineJavaScriptVoid($formString);
+        $formString = $this->handleInlineScriptTags($formString);
 
         return $formString;
+    }
+
+    /**
+     * @param string|array $confirmation
+     *
+     * @return string|array
+     */
+    public function modifyConfirmationHtml($confirmation)
+    {
+        // An array confirmation is a redirect (['redirect' => $url]) and holds no markup.
+        if (! is_string($confirmation)) {
+            return $confirmation;
+        }
+
+        return $this->handleInlineScriptTags($confirmation);
     }
 }

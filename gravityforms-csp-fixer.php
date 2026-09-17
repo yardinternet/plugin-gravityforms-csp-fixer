@@ -3,8 +3,8 @@
 /**
  * Plugin Name:       GravityForms CSP Fixer
  * Description:       Fixes GravityForms plugin, so it is CSP compliant.
- * Version:           0.1.3
- * Requires at least: 5.9
+ * Version:           0.1.4
+ * Requires at least: 6.5
  * Requires PHP:      7.4
  * Author:            Yard | Digital Agency
  * Author URI:        https://www.yard.nl/
@@ -17,7 +17,7 @@ if (! defined('WPINC')) {
     die;
 }
 
-define('YCSP_VERSION', '0.1.3');
+define('YCSP_VERSION', '0.1.4');
 define('YCSP_DIR', basename(__DIR__));
 define('YCSP_ROOT_PATH', __DIR__);
 
