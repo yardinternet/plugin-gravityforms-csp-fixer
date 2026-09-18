@@ -10,6 +10,7 @@ With this plugin you should be able to disallow `unsafe-inline` and `unsafe-eval
 * Handle inline on* attributes
 * Handle inline styling attributes
 * Handle inline JavaScript void links
+* Handle inline `<script>` tags in the form and confirmation markup
 
 ## About us
 
