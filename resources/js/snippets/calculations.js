@@ -10,7 +10,13 @@ window.gform.initializeOnLoaded( function () {
 
 	// Create the patched constructor
 	window.GFCalc = function ( formId, formulaFields ) {
-		const instance = new OriginalGFCalc( formId, formulaFields ); // Call the original constructor
+		/**
+		 * Call the original constructor without formula fields. The original constructor calls init(),
+		 * which would run the original eval() based runCalc before it is overridden. That briefly sets
+		 * calculation fields to 0 and makes conditional logic reset the values of dependent fields.
+		 */
+		const instance = new OriginalGFCalc( formId, [] );
+		instance.formulaFields = formulaFields;
 
 		// Override the runCalc method
 		instance.runCalc = function ( formulaField, formId ) {
@@ -153,6 +159,9 @@ window.gform.initializeOnLoaded( function () {
 				formulaInput.val( result ).trigger( 'change' );
 			}
 		};
+
+		// Initialize with the formula fields now that runCalc is overridden
+		instance.init( formId, formulaFields );
 
 		return instance;
 	};

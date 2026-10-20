@@ -1010,8 +1010,8 @@ C.prototype.isOperatorEnabled = function(e) {
 window.gform.initializeOnLoaded(function() {
   const e = window.GFCalc;
   window.GFCalc = function(t, r) {
-    const s = new e(t, r);
-    return s.runCalc = function(n, i) {
+    const s = new e(t, []);
+    return s.formulaFields = r, s.runCalc = function(n, i) {
       let a = this, u = jQuery(
         "#field_" + i + "_" + n.field_id
       ), h = u.hasClass("gfield_price") ? jQuery(
@@ -1079,7 +1079,7 @@ window.gform.initializeOnLoaded(function() {
       }), jQuery(".gfield_label_product").length && !jQuery(".ginput_total").length && (o = jQuery(
         "label[ for=input_" + i + "_" + n.field_id + "_1 ]"
       ).find(".gfield_label_product").text() + " " + o, wp.a11y.speak(o))) : h.val(o).trigger("change"));
-    }, s;
+    }, s.init(t, r), s;
   };
 });
 jQuery(document).on(
