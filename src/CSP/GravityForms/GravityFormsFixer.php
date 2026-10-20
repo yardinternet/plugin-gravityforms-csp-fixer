@@ -27,17 +27,25 @@ class GravityFormsFixer
                  * in case of multiple elements sharing same event listener
                  * (e.g. gravity forms list field add/remove button)
                  * .call() is used to delegate proper "this" keyword to original event handler
+                 * The listener is registered only once, because AJAX form renders (pagination,
+                 * validation) re-execute this script and would otherwise stack duplicate listeners.
                  */
 				$scriptIds[] = $scriptId;
 				$scriptTags[] = wp_get_inline_script_tag(
 					sprintf(
-						'document.addEventListener("%2$s", function(e) {
-							const parent = e.target.closest("[data-on%2$s-handler=%1$s]");
+						'window.gfCspFixerHandlers = window.gfCspFixerHandlers || {};
 
-							if (parent) {
-								(function(element){ %3$s })(parent);
-							}
-						});',
+						if (!window.gfCspFixerHandlers["%1$s"]) {
+							window.gfCspFixerHandlers["%1$s"] = true;
+
+							document.addEventListener("%2$s", function(e) {
+								const parent = e.target.closest("[data-on%2$s-handler=%1$s]");
+
+								if (parent) {
+									(function(element){ %3$s })(parent);
+								}
+							});
+						}',
 						$scriptId,
 						$event,
 						str_replace('this', 'element', $handlerCode)
