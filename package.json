@@ -5,7 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"start": "WATCH=true vite build",
-		"build": "vite build",
+		"start:css": "WATCH=true vite build --config vite.css.config.js",
+		"build": "vite build && vite build --config vite.css.config.js",
 		"test": "vitest"
 	},
 	"devDependencies": {

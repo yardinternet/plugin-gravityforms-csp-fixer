@@ -22,6 +22,9 @@ class WordPressServiceProvider extends ServiceProvider
         }
         wp_enqueue_style('wp-a11y-css', sprintf('%s/public/replacements/css/a11y.css', $this->plugin->getPluginUrl()), [], false);
 
+        // Mirrors core block selectors that depend on the `style` attribute, which moveInlineStyles() removes.
+        wp_enqueue_style('yard-csp-fixer-blocks', sprintf('%s/public/build/css/blocks.css', $this->plugin->getPluginUrl()), [], $this->plugin->getVersion());
+
         // https://github.com/WordPress/WordPress/blob/master/wp-includes/js/plupload/moxie.js unsafe inline style attribute
         if (isset($wpScripts->registered['moxiejs'])) {
             $wpScripts->registered['moxiejs']->src = sprintf('%s/public/replacements/js/moxie.js', $this->plugin->getPluginUrl());
