@@ -1,0 +1,19 @@
+/**
+ * WordPress core styles some blocks based on the presence of an inline `style`
+ * attribute, e.g. `[style*=flex-basis]`. This plugin moves those inline styles
+ * to a class and keeps the original value in `data-inline-style`, so the core
+ * selectors no longer match. The rules below mirror them on `data-inline-style`.
+ *
+ * Source: wp-includes/css/dist/block-library/style.css
+ */
+
+/* core/columns: a column with a set width should not grow. */
+@media (min-width: 782px) {
+	.wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column[data-inline-style*='flex-basis'] {
+		flex-grow: 0;
+	}
+}
+
+.wp-block-columns.is-not-stacked-on-mobile > .wp-block-column[data-inline-style*='flex-basis'] {
+	flex-grow: 0;
+}
